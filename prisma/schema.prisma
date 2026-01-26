@@ -1,0 +1,155 @@
+// This is your Prisma schema file for MongoDB
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// User roles enum
+enum Role {
+  SUPERUSER
+  TEMPLE_BOARD
+  USER
+}
+
+// Booking status enum
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  VERIFIED
+  CANCELLED
+  EXPIRED
+}
+
+// User model with role-based access control
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  email         String    @unique
+  password      String
+  name          String
+  phone         String?
+  role          Role      @default(USER)
+  isApproved    Boolean   @default(false) // For temple board approval by superuser
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  temples       Temple[]  // Temples owned by this user (for TEMPLE_BOARD)
+  bookings      Booking[] // Bookings made by this user
+  verifiedBookings Booking[] @relation("VerifiedBy") // Bookings verified by this user
+
+  // Indexes for faster queries
+  @@index([role])
+  @@index([role, isApproved])
+  @@index([createdAt])
+}
+
+// Temple model
+model Temple {
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  name             String
+  description      String
+  location         String
+  address          String
+  city             String
+  state            String
+  pincode          String
+  images           String[]
+  timings          String    // e.g., "6:00 AM - 12:00 PM, 4:00 PM - 9:00 PM"
+  dailyTicketLimit Int       @default(100)
+  ticketPrice      Float     @default(0)
+  isActive         Boolean   @default(true)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  // Owner relation
+  ownerId          String    @db.ObjectId
+  owner            User      @relation(fields: [ownerId], references: [id])
+
+  // Relations
+  bookings         Booking[]
+  timeSlots        TimeSlot[]
+
+  // Indexes for efficient queries and aggregation pipelines
+  @@index([ownerId])
+  @@index([city])
+  @@index([state])
+  @@index([isActive])
+  @@index([city, isActive])
+  @@index([state, isActive])
+  @@index([createdAt])
+}
+
+// Time slots for slot-based booking
+model TimeSlot {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  templeId    String    @db.ObjectId
+  temple      Temple    @relation(fields: [templeId], references: [id], onDelete: Cascade)
+  startTime   String    // e.g., "06:00"
+  endTime     String    // e.g., "08:00"
+  capacity    Int       @default(50) // Max bookings per slot
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  bookings    Booking[]
+
+  // Indexes
+  @@index([templeId, isActive])
+  @@unique([templeId, startTime, endTime])
+}
+
+// Booking model with QR code support
+model Booking {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  bookingNumber String        @unique // Human-readable booking number
+  
+  // User relation
+  userId        String        @db.ObjectId
+  user          User          @relation(fields: [userId], references: [id])
+  
+  // Temple relation
+  templeId      String        @db.ObjectId
+  temple        Temple        @relation(fields: [templeId], references: [id])
+  
+  // Time slot relation
+  timeSlotId    String        @db.ObjectId
+  timeSlot      TimeSlot      @relation(fields: [timeSlotId], references: [id])
+  
+  // Booking details
+  visitDate     DateTime
+  ticketCount   Int           @default(1)
+  totalAmount   Float         @default(0)
+  status        BookingStatus @default(PENDING)
+  
+  // QR Code data (encrypted JSON string)
+  qrCodeData    String?
+  qrCodeUrl     String?       // Base64 or URL to QR image
+  
+  // Verification details
+  verifiedAt    DateTime?
+  verifiedById  String?       @db.ObjectId
+  verifiedBy    User?         @relation("VerifiedBy", fields: [verifiedById], references: [id])
+  
+  // Timestamps
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Indexes for fast retrieval and aggregation
+  @@index([userId])
+  @@index([templeId])
+  @@index([timeSlotId])
+  @@index([visitDate])
+  @@index([status])
+  @@index([templeId, visitDate])
+  @@index([templeId, visitDate, status])
+  @@index([userId, status])
+  @@index([createdAt])
+}
