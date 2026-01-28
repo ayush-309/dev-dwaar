@@ -27,6 +27,7 @@ interface TimeSlot {
     endTime: string;
     capacity: number;
     isActive: boolean;
+    availableTickets?: number; // Available tickets for selected date
 }
 
 export default function BookingPage() {
@@ -55,9 +56,26 @@ export default function BookingPage() {
         }
     }, [status, templeId]);
 
-    const fetchTempleDetails = async () => {
+    useEffect(() => {
+        if (visitDate && status === "authenticated") {
+            fetchTempleDetails(visitDate);
+        }
+    }, [visitDate]);
+
+    useEffect(() => {
+        // Reset ticket count when slot changes
+        if (selectedSlot && temple) {
+            const slot = temple.timeSlots.find(s => s.id === selectedSlot);
+            if (slot && slot.availableTickets !== undefined && ticketCount > slot.availableTickets) {
+                setTicketCount(Math.min(1, slot.availableTickets));
+            }
+        }
+    }, [selectedSlot, temple]);
+
+    const fetchTempleDetails = async (date?: string) => {
         try {
-            const res = await fetch(`/api/temples/${templeId}`);
+            const url = date ? `/api/temples/${templeId}?date=${date}` : `/api/temples/${templeId}`;
+            const res = await fetch(url);
             if (res.ok) {
                 const data = await res.json();
                 setTemple(data.temple);
@@ -259,8 +277,8 @@ export default function BookingPage() {
                                 >
                                     <option value="">Select a time slot</option>
                                     {temple.timeSlots.filter(slot => slot.isActive).map((slot) => (
-                                        <option key={slot.id} value={slot.id}>
-                                            {slot.startTime} - {slot.endTime} (Capacity: {slot.capacity})
+                                        <option key={slot.id} value={slot.id} disabled={slot.availableTickets === 0}>
+                                            {slot.startTime} - {slot.endTime} ({slot.availableTickets !== undefined ? `${slot.availableTickets} available` : `${slot.capacity} capacity`})
                                         </option>
                                     ))}
                                 </select>
@@ -287,13 +305,24 @@ export default function BookingPage() {
                                     <button
                                         type="button"
                                         onClick={() => setTicketCount(prev => Math.min(10, prev + 1))}
-                                        disabled={ticketCount >= 10}
+                                        disabled={ticketCount >= 10 || (selectedSlot !== "" && temple?.timeSlots.find(slot => slot.id === selectedSlot)?.availableTickets !== undefined && ticketCount >= (temple.timeSlots.find(slot => slot.id === selectedSlot)?.availableTickets || 0))}
                                         className="w-12 h-12 flex items-center justify-center bg-orange-600 hover:bg-orange-700 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed text-white rounded-lg font-bold text-xl transition-colors"
                                     >
                                         +
                                     </button>
                                 </div>
-                                <p className="text-xs text-gray-500 mt-1">Maximum 10 tickets per booking</p>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    {selectedSlot && temple ? (
+                                        (() => {
+                                            const slot = temple.timeSlots.find(s => s.id === selectedSlot);
+                                            return slot?.availableTickets !== undefined
+                                                ? `Available: ${slot.availableTickets} tickets`
+                                                : 'Maximum 10 tickets per booking';
+                                        })()
+                                    ) : (
+                                        'Maximum 10 tickets per booking'
+                                    )}
+                                </p>
                             </div>
 
                             {/* Total Amount */}

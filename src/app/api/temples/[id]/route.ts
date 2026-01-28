@@ -11,6 +11,9 @@ export async function GET(
 ) {
     try {
         const { id } = await params;
+        const { searchParams } = new URL(req.url);
+        const date = searchParams.get('date');
+
         const temple = await prisma.temple.findUnique({
             where: { id },
             include: {
@@ -39,7 +42,53 @@ export async function GET(
             );
         }
 
-        return NextResponse.json({ temple });
+        // If date is provided, calculate available tickets for each time slot
+        let timeSlotsWithAvailability = temple.timeSlots;
+
+        if (date) {
+            const visitDate = new Date(date);
+            const startOfDay = new Date(visitDate);
+            startOfDay.setHours(0, 0, 0, 0);
+            const endOfDay = new Date(visitDate);
+            endOfDay.setHours(23, 59, 59, 999);
+
+            // Get bookings for this date
+            const bookingsForDate = await prisma.booking.findMany({
+                where: {
+                    templeId: id,
+                    visitDate: {
+                        gte: startOfDay,
+                        lte: endOfDay,
+                    },
+                    status: {
+                        in: ["PENDING", "CONFIRMED", "VERIFIED"],
+                    },
+                },
+                select: {
+                    timeSlotId: true,
+                    ticketCount: true,
+                },
+            });
+
+            // Calculate booked tickets per time slot
+            const bookedTicketsBySlot = bookingsForDate.reduce((acc, booking) => {
+                acc[booking.timeSlotId] = (acc[booking.timeSlotId] || 0) + booking.ticketCount;
+                return acc;
+            }, {} as Record<string, number>);
+
+            // Add availability to each time slot
+            timeSlotsWithAvailability = temple.timeSlots.map(slot => ({
+                ...slot,
+                availableTickets: slot.capacity - (bookedTicketsBySlot[slot.id] || 0),
+            }));
+        }
+
+        return NextResponse.json({
+            temple: {
+                ...temple,
+                timeSlots: timeSlotsWithAvailability,
+            }
+        });
     } catch (error) {
         console.error("Error fetching temple:", error);
         return NextResponse.json(
