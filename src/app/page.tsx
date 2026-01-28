@@ -126,7 +126,7 @@ export default async function HomePage() {
 
 function TempleCard({ temple }: { temple: Temple }) {
   return (
-    <Link href={`/temple/${temple.id}`} className="group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-zinc-800 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+    <Link href={`/book/${temple.id}`} className="group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-zinc-800 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
       <div className="h-48 bg-gray-200 dark:bg-zinc-800 relative overflow-hidden">
         {temple.images?.[0] ? (
           <img src={temple.images[0]} alt={temple.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />

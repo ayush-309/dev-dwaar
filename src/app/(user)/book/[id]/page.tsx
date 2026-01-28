@@ -272,15 +272,27 @@ export default function BookingPage() {
                                     <Users className="w-4 h-4 text-orange-600" />
                                     Number of Tickets
                                 </label>
-                                <input
-                                    type="number"
-                                    min="1"
-                                    max="10"
-                                    value={ticketCount}
-                                    onChange={(e) => setTicketCount(parseInt(e.target.value))}
-                                    required
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                                />
+                                <div className="flex items-center gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => setTicketCount(prev => Math.max(1, prev - 1))}
+                                        disabled={ticketCount <= 1}
+                                        className="w-12 h-12 flex items-center justify-center bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed text-gray-700 rounded-lg font-bold text-xl transition-colors"
+                                    >
+                                        -
+                                    </button>
+                                    <div className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg text-center font-semibold text-xl bg-white">
+                                        {ticketCount}
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => setTicketCount(prev => Math.min(10, prev + 1))}
+                                        disabled={ticketCount >= 10}
+                                        className="w-12 h-12 flex items-center justify-center bg-orange-600 hover:bg-orange-700 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed text-white rounded-lg font-bold text-xl transition-colors"
+                                    >
+                                        +
+                                    </button>
+                                </div>
                                 <p className="text-xs text-gray-500 mt-1">Maximum 10 tickets per booking</p>
                             </div>
 
