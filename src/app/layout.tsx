@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Temple Booking System",
+  title: "Dev Dwaar - Temple Booking System",
   description: "Secure and easy temple visit booking platform",
 };
 

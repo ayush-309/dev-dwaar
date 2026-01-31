@@ -119,9 +119,9 @@ export default function SuperuserDashboard() {
 
     if (loading || status === "loading") {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
                     <p className="mt-4 text-gray-600">Loading dashboard...</p>
                 </div>
             </div>
@@ -129,7 +129,7 @@ export default function SuperuserDashboard() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Header */}
                 <div className="mb-8">
@@ -148,7 +148,7 @@ export default function SuperuserDashboard() {
                             icon={<Users className="w-6 h-6" />}
                             label="Total Users"
                             value={stats.totalUsers}
-                            color="blue"
+                            color="orange"
                         />
                         <StatCard
                             icon={<Building2 className="w-6 h-6" />}
@@ -161,7 +161,7 @@ export default function SuperuserDashboard() {
                             label="Total Bookings"
                             value={stats.totalBookings}
                             subValue={`${stats.verifiedBookings} verified`}
-                            color="purple"
+                            color="amber"
                         />
                         <StatCard
                             icon={<DollarSign className="w-6 h-6" />}
@@ -219,7 +219,7 @@ export default function SuperuserDashboard() {
                 {/* Recent Bookings */}
                 <div className="bg-white rounded-xl shadow-lg p-6">
                     <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <TrendingUp className="w-6 h-6 text-indigo-600" />
+                        <TrendingUp className="w-6 h-6 text-orange-600" />
                         Recent Bookings
                     </h2>
 
@@ -293,9 +293,9 @@ function StatCard({ icon, label, value, subValue, color }: {
     color: "blue" | "green" | "purple" | "orange";
 }) {
     const colorClasses = {
-        blue: "bg-blue-500",
+        orange: "bg-orange-500",
         green: "bg-green-500",
-        purple: "bg-purple-500",
+        amber: "bg-amber-500",
         orange: "bg-orange-500",
     };
 
@@ -320,7 +320,7 @@ function getStatusColor(status: string) {
         case "VERIFIED":
             return "bg-green-100 text-green-800";
         case "CONFIRMED":
-            return "bg-blue-100 text-blue-800";
+            return "bg-orange-100 text-orange-800";
         case "PENDING":
             return "bg-yellow-100 text-yellow-800";
         case "CANCELLED":

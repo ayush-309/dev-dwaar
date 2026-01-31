@@ -28,18 +28,18 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-yellow-100">
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-white dark:bg-zinc-900 border-b border-gray-100 dark:border-zinc-800">
+      <div className="relative overflow-hidden bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-10">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-6">
+            <h1 className="text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-6 drop-shadow-lg">
               Experience Spiritual Bliss with{" "}
-              <span className="text-indigo-600 dark:text-indigo-400">Easy Bookings</span>
+              <span className="text-yellow-100">Easy Bookings</span>
             </h1>
-            <p className="text-xl text-gray-600 dark:text-zinc-400 mb-10 leading-relaxed">
+            <p className="text-xl text-white/95 mb-10 leading-relaxed drop-shadow-md">
               Skip the long queues. Book your temple visit in seconds and receive your digital ticket instantly.
             </p>
 
@@ -49,7 +49,7 @@ export default async function HomePage() {
               </div>
               <input
                 type="text"
-                className="block w-full pl-12 pr-4 py-4 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-2xl shadow-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+                className="block w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-2xl shadow-xl focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all outline-none text-gray-900"
                 placeholder="Search by temple name, city, or state..."
               />
             </div>
@@ -57,18 +57,18 @@ export default async function HomePage() {
         </div>
 
         {/* Background blobs */}
-        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-yellow-300/40 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-96 h-96 bg-amber-300/40 rounded-full blur-3xl" />
       </div>
 
       {/* Featured Temples */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="flex items-center justify-between mb-10">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Featured Temples</h2>
-            <p className="text-gray-600 dark:text-zinc-400 mt-2">Discover popular spiritual destinations</p>
+            <h2 className="text-3xl font-bold text-gray-900">Featured Temples</h2>
+            <p className="text-gray-600 mt-2">Discover popular spiritual destinations</p>
           </div>
-          <Link href="/explore" className="text-indigo-600 font-semibold flex items-center gap-1 hover:gap-2 transition-all">
+          <Link href="/explore" className="text-yellow-600 hover:text-yellow-700 font-semibold flex items-center gap-1 hover:gap-2 transition-all">
             View All <ArrowRight size={18} />
           </Link>
         </div>
@@ -80,12 +80,12 @@ export default async function HomePage() {
             ))}
           </div>
         ) : (
-          <div className="bg-indigo-50 dark:bg-indigo-900/10 rounded-3xl p-12 text-center border-2 border-dashed border-indigo-100 dark:border-indigo-900/30">
-            <div className="w-16 h-16 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm text-indigo-500">
+          <div className="bg-yellow-50 rounded-3xl p-12 text-center border-2 border-dashed border-yellow-300">
+            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm text-yellow-600">
               <Building2 size={32} />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No temples found yet</h3>
-            <p className="text-gray-600 dark:text-zinc-400 max-w-md mx-auto">
+            <h3 className="text-xl font-bold text-gray-900 mb-2">No temples found yet</h3>
+            <p className="text-gray-600 max-w-md mx-auto">
               Our temple list is growing. Check back soon or register as a temple board to list your own temple!
             </p>
           </div>
@@ -93,7 +93,7 @@ export default async function HomePage() {
       </div>
 
       {/* Features Section */}
-      <div className="bg-white dark:bg-zinc-900 py-20 border-y border-gray-100 dark:border-zinc-800">
+      <div className="bg-white py-20 border-y border-yellow-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <Feature
@@ -113,10 +113,10 @@ export default async function HomePage() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-50 dark:bg-zinc-950 py-12 border-t border-gray-200 dark:border-zinc-800">
+      <footer className="bg-gradient-to-r from-yellow-50 to-orange-50 py-12 border-t border-yellow-200">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-gray-500 dark:text-zinc-500 text-sm">
-            © {new Date().getFullYear()} TempleBook Platform. All rights reserved.
+          <p className="text-gray-700 text-sm font-medium">
+            © {new Date().getFullYear()} Dev Dwaar Platform. All rights reserved.
           </p>
         </div>
       </footer>
@@ -126,37 +126,37 @@ export default async function HomePage() {
 
 function TempleCard({ temple }: { temple: Temple }) {
   return (
-    <Link href={`/book/${temple.id}`} className="group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-zinc-800 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-      <div className="h-48 bg-gray-200 dark:bg-zinc-800 relative overflow-hidden">
+    <Link href={`/book/${temple.id}`} className="group bg-white rounded-2xl overflow-hidden border-2 border-yellow-200 hover:shadow-2xl hover:border-yellow-400 transition-all duration-300 hover:-translate-y-1">
+      <div className="h-48 bg-gradient-to-br from-yellow-100 to-orange-100 relative overflow-hidden">
         {temple.images?.[0] ? (
           <img src={temple.images[0]} alt={temple.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-400">
+          <div className="w-full h-full flex items-center justify-center text-yellow-600">
             <Building2 size={48} />
           </div>
         )}
-        <div className="absolute top-4 right-4 bg-white/90 dark:bg-black/50 backdrop-blur px-2 py-1 rounded-lg flex items-center gap-1 text-sm font-bold">
+        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-2 py-1 rounded-lg flex items-center gap-1 text-sm font-bold">
           <Star size={14} className="text-yellow-500 fill-yellow-500" />
           4.5
         </div>
       </div>
       <div className="p-6">
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-indigo-600 transition-colors">{temple.name}</h3>
+        <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-yellow-600 transition-colors">{temple.name}</h3>
         <div className="space-y-2 mb-4">
-          <div className="flex items-center gap-2 text-gray-500 dark:text-zinc-400 text-sm">
+          <div className="flex items-center gap-2 text-gray-500 text-sm">
             <MapPin size={16} />
             {temple.city}, {temple.state}
           </div>
-          <div className="flex items-center gap-2 text-gray-500 dark:text-zinc-400 text-sm">
+          <div className="flex items-center gap-2 text-gray-500 text-sm">
             <Clock size={16} />
             {temple.timings}
           </div>
         </div>
-        <div className="flex items-center justify-between pt-4 border-t border-gray-50 dark:border-zinc-800">
-          <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+        <div className="flex items-center justify-between pt-4 border-t border-yellow-100">
+          <span className="text-lg font-bold text-yellow-600">
             {temple.ticketPrice === 0 ? "Free Entry" : `₹${temple.ticketPrice}`}
           </span>
-          <span className="text-xs font-medium px-2 py-1 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-full">
+          <span className="text-xs font-medium px-2 py-1 bg-green-50 text-green-700 rounded-full border border-green-200">
             Available
           </span>
         </div>
@@ -168,11 +168,11 @@ function TempleCard({ temple }: { temple: Temple }) {
 function Feature({ title, desc }: { title: string, desc: string }) {
   return (
     <div className="space-y-4">
-      <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+      <div className="w-12 h-12 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-2xl flex items-center justify-center text-yellow-600">
         <ShieldCheck size={24} />
       </div>
-      <h3 className="text-xl font-bold dark:text-white">{title}</h3>
-      <p className="text-gray-600 dark:text-zinc-400 leading-relaxed">{desc}</p>
+      <h3 className="text-xl font-bold text-gray-900">{title}</h3>
+      <p className="text-gray-600 leading-relaxed">{desc}</p>
     </div>
   );
 }

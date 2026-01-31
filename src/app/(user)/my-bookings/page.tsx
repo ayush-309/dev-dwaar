@@ -76,9 +76,9 @@ export default function MyBookingsPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
                     <p className="mt-4 text-gray-600">Loading your bookings...</p>
                 </div>
             </div>
@@ -86,7 +86,7 @@ export default function MyBookingsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <h1 className="text-4xl font-bold text-gray-900 mb-8">My Bookings</h1>
 
@@ -120,14 +120,14 @@ export default function MyBookingsPage() {
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                             <div className="flex items-center gap-2 text-gray-600">
-                                                <MapPin className="w-4 h-4 text-purple-600" />
+                                                <MapPin className="w-4 h-4 text-orange-600" />
                                                 <span className="text-sm">
                                                     {booking.temple.location}, {booking.temple.city}
                                                 </span>
                                             </div>
 
                                             <div className="flex items-center gap-2 text-gray-600">
-                                                <Calendar className="w-4 h-4 text-purple-600" />
+                                                <Calendar className="w-4 h-4 text-orange-600" />
                                                 <span className="text-sm">
                                                     {new Date(booking.visitDate).toLocaleDateString("en-IN", {
                                                         weekday: "short",
@@ -139,14 +139,14 @@ export default function MyBookingsPage() {
                                             </div>
 
                                             <div className="flex items-center gap-2 text-gray-600">
-                                                <Clock className="w-4 h-4 text-purple-600" />
+                                                <Clock className="w-4 h-4 text-orange-600" />
                                                 <span className="text-sm">
                                                     {booking.timeSlot.startTime} - {booking.timeSlot.endTime}
                                                 </span>
                                             </div>
 
                                             <div className="flex items-center gap-2 text-gray-600">
-                                                <IndianRupee className="w-4 h-4 text-purple-600" />
+                                                <IndianRupee className="w-4 h-4 text-orange-600" />
                                                 <span className="text-sm font-semibold">
                                                     ₹{booking.totalAmount} ({booking.ticketCount} tickets)
                                                 </span>
@@ -166,7 +166,7 @@ export default function MyBookingsPage() {
                                         <div className="flex gap-3">
                                             <button
                                                 onClick={() => setSelectedBooking(booking)}
-                                                className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                                                className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
                                             >
                                                 <QrCode className="w-4 h-4" />
                                                 View QR Code
@@ -182,7 +182,7 @@ export default function MyBookingsPage() {
                                     </div>
 
                                     {/* Right Section - QR Code Preview */}
-                                    <div className="md:w-64 bg-gradient-to-br from-purple-100 to-pink-100 p-6 flex items-center justify-center">
+                                    <div className="md:w-64 bg-gradient-to-br from-orange-100 to-yellow-100 p-6 flex items-center justify-center">
                                         {booking.qrCodeUrl && (
                                             <div className="bg-white p-3 rounded-lg shadow-lg">
                                                 <Image
@@ -210,7 +210,7 @@ export default function MyBookingsPage() {
                         </p>
                         <button
                             onClick={() => router.push("/explore")}
-                            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all"
+                            className="px-6 py-3 bg-gradient-to-r from-orange-600 to-amber-600 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-amber-700 transition-all"
                         >
                             Explore Temples
                         </button>
@@ -232,7 +232,7 @@ export default function MyBookingsPage() {
                             Your Ticket QR Code
                         </h3>
 
-                        <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 mb-4">
+                        <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-6 mb-4">
                             <div className="bg-white p-4 rounded-lg inline-block mx-auto">
                                 {selectedBooking.qrCodeUrl && (
                                     <Image
@@ -262,7 +262,7 @@ export default function MyBookingsPage() {
                         <div className="flex gap-3">
                             <button
                                 onClick={() => downloadQR(selectedBooking)}
-                                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
                             >
                                 <Download className="w-4 h-4" />
                                 Download
@@ -286,7 +286,7 @@ function getStatusBadgeColor(status: string) {
         case "VERIFIED":
             return "bg-green-100 text-green-800 border border-green-200";
         case "CONFIRMED":
-            return "bg-blue-100 text-blue-800 border border-blue-200";
+            return "bg-orange-100 text-orange-800 border border-orange-200";
         case "PENDING":
             return "bg-yellow-100 text-yellow-800 border border-yellow-200";
         case "CANCELLED":

@@ -14,7 +14,7 @@ export default function UnauthorizedPage() {
                 </p>
                 <Link
                     href="/"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-500/20"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-orange-500/20"
                 >
                     <ArrowLeft size={18} />
                     Go Back Home

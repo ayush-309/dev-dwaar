@@ -99,7 +99,7 @@ export default function QRScanner() {
                         <div id="reader" className="overflow-hidden rounded-2xl border-0"></div>
 
                         {verifying && (
-                            <div className="mt-6 flex items-center justify-center gap-3 text-indigo-600 font-bold">
+                            <div className="mt-6 flex items-center justify-center gap-3 text-orange-600 font-bold">
                                 <RefreshCcw className="animate-spin" />
                                 Verifying ticket...
                             </div>
@@ -142,7 +142,7 @@ export default function QRScanner() {
                         {scanResult && (
                             <div className="space-y-4 bg-gray-50 dark:bg-zinc-800/50 p-6 rounded-2xl border border-gray-100 dark:border-zinc-800">
                                 <div className="flex items-center gap-4 border-b border-gray-100 dark:border-zinc-800 pb-4">
-                                    <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                                    <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center text-orange-600 dark:text-orange-400">
                                         <User size={24} />
                                     </div>
                                     <div>
@@ -177,7 +177,7 @@ export default function QRScanner() {
 
                         <button
                             onClick={resetScanner}
-                            className="mt-8 w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl transition-all shadow-xl shadow-indigo-600/20 flex items-center justify-center gap-2"
+                            className="mt-8 w-full py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-2xl transition-all shadow-xl shadow-orange-600/20 flex items-center justify-center gap-2"
                         >
                             <RefreshCcw size={20} />
                             Scan Next Ticket

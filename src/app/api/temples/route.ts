@@ -32,6 +32,10 @@ export async function GET(req: NextRequest) {
                         email: true,
                     },
                 },
+                timeSlots: {
+                    where: { isActive: true },
+                    orderBy: { startTime: 'asc' },
+                },
                 _count: {
                     select: {
                         bookings: true,
@@ -54,6 +58,11 @@ export async function GET(req: NextRequest) {
 }
 
 // POST /api/temples - Create a new temple (TEMPLE_BOARD only)
+const timeSlotSchema = z.object({
+    startTime: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format"),
+    endTime: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format"),
+});
+
 const createTempleSchema = z.object({
     name: z.string().min(1, "Temple name is required"),
     description: z.string().min(10, "Description must be at least 10 characters"),
@@ -64,6 +73,7 @@ const createTempleSchema = z.object({
     pincode: z.string().regex(/^\d{6}$/, "Invalid pincode"),
     images: z.array(z.string().url()).optional(),
     timings: z.string().min(1, "Timings are required"),
+    timeSlots: z.array(timeSlotSchema).min(1, "At least one time slot is required"),
     dailyTicketLimit: z.number().int().min(1, "Daily ticket limit must be at least 1"),
     ticketPrice: z.number().min(0, "Ticket price cannot be negative"),
 });
@@ -89,12 +99,52 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
         const validatedData = createTempleSchema.parse(body);
 
-        const temple = await prisma.temple.create({
-            data: {
-                ...validatedData,
-                images: validatedData.images || [],
-                ownerId: session.user.id,
-            },
+        // Validate time slots logic
+        for (const slot of validatedData.timeSlots) {
+            if (slot.startTime >= slot.endTime) {
+                return NextResponse.json(
+                    { error: "Opening time must be before closing time for all time slots" },
+                    { status: 400 }
+                );
+            }
+        }
+
+        // Create temple and time slots in a transaction
+        const result = await prisma.$transaction(async (tx) => {
+            // Create the temple
+            const temple = await tx.temple.create({
+                data: {
+                    name: validatedData.name,
+                    description: validatedData.description,
+                    location: validatedData.location,
+                    address: validatedData.address,
+                    city: validatedData.city,
+                    state: validatedData.state,
+                    pincode: validatedData.pincode,
+                    images: validatedData.images || [],
+                    timings: validatedData.timings,
+                    dailyTicketLimit: validatedData.dailyTicketLimit,
+                    ticketPrice: validatedData.ticketPrice,
+                    ownerId: session.user.id,
+                },
+            });
+
+            // Create the time slots
+            const timeSlots = await tx.timeSlot.createMany({
+                data: validatedData.timeSlots.map(slot => ({
+                    templeId: temple.id,
+                    startTime: slot.startTime,
+                    endTime: slot.endTime,
+                    capacity: Math.ceil(validatedData.dailyTicketLimit / validatedData.timeSlots.length),
+                })),
+            });
+
+            return { temple, timeSlots };
+        });
+
+        // Fetch the complete temple with time slots and owner info
+        const completeTemple = await prisma.temple.findUnique({
+            where: { id: result.temple.id },
             include: {
                 owner: {
                     select: {
@@ -102,10 +152,14 @@ export async function POST(req: NextRequest) {
                         email: true,
                     },
                 },
+                timeSlots: {
+                    where: { isActive: true },
+                    orderBy: { startTime: 'asc' },
+                },
             },
         });
 
-        return NextResponse.json({ temple }, { status: 201 });
+        return NextResponse.json({ temple: completeTemple }, { status: 201 });
     } catch (error) {
         console.error("Error creating temple:", error);
 

@@ -50,7 +50,7 @@ function LoginForm() {
                         Welcome Back
                     </h2>
                     <p className="mt-2 text-sm text-gray-600 dark:text-zinc-400">
-                        Sign in to access your temple bookings
+                        Sign in to Dev Dwaar - Access your temple bookings
                     </p>
                 </div>
 
@@ -71,7 +71,7 @@ function LoginForm() {
                                 name="email"
                                 type="email"
                                 required
-                                className="block w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+                                className="block w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all outline-none"
                                 placeholder="you@example.com"
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -86,7 +86,7 @@ function LoginForm() {
                                 name="password"
                                 type="password"
                                 required
-                                className="block w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+                                className="block w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all outline-none"
                                 placeholder="••••••••"
                                 value={formData.password}
                                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -98,7 +98,7 @@ function LoginForm() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition-all duration-200 shadow-lg shadow-indigo-500/20"
+                            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50 transition-all duration-200 shadow-lg shadow-orange-500/20"
                         >
                             {loading ? "Signing in..." : "Sign in"}
                         </button>
@@ -108,7 +108,7 @@ function LoginForm() {
                 <div className="text-center text-sm">
                     <p className="text-gray-600 dark:text-zinc-400">
                         Don't have an account?{" "}
-                        <Link href="/register" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                        <Link href="/register" className="font-semibold text-orange-600 hover:text-orange-500">
                             Register here
                         </Link>
                     </p>

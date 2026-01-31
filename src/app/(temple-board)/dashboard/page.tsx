@@ -10,6 +10,7 @@ import {
     CheckCircle2,
     Clock
 } from "lucide-react";
+import Link from "next/link";
 
 export default async function DashboardPage() {
     const session = await getServerSession(authOptions);
@@ -51,8 +52,8 @@ export default async function DashboardPage() {
     }
 
     const statCards = [
-        { label: "Total Temples", value: stats.totalTemples, icon: Building2, color: "bg-blue-500" },
-        { label: "Total Bookings", value: stats.activeBookings, icon: Ticket, color: "bg-indigo-500" },
+        { label: "Total Temples", value: stats.totalTemples, icon: Building2, color: "bg-orange-500" },
+        { label: "Total Bookings", value: stats.activeBookings, icon: Ticket, color: "bg-orange-500" },
         { label: "Bookings Today", value: stats.todayBookings, icon: Calendar, color: "bg-emerald-500" },
         { label: "Total Revenue", value: `₹${stats.revenue}`, icon: TrendingUp, color: "bg-amber-500" },
     ];
@@ -89,13 +90,13 @@ export default async function DashboardPage() {
                 <div className="bg-white dark:bg-zinc-900 p-8 rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-bold dark:text-white">Recent Activities</h2>
-                        <button className="text-indigo-600 dark:text-indigo-400 text-sm font-semibold">View All</button>
+                        <button className="text-orange-600 dark:text-orange-400 text-sm font-semibold">View All</button>
                     </div>
 
                     <div className="space-y-6">
                         {[1, 2, 3].map((_, i) => (
                             <div key={i} className="flex gap-4 p-4 rounded-xl bg-gray-50 dark:bg-zinc-800/50 border border-gray-100 dark:border-zinc-800">
-                                <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0">
+                                <div className="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 shrink-0">
                                     <CheckCircle2 size={20} />
                                 </div>
                                 <div>
@@ -113,16 +114,16 @@ export default async function DashboardPage() {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <button className="p-4 rounded-xl bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-900/30 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors text-left group">
+                        <Link href="/dashboard/verify" className="p-4 rounded-xl bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-900/30 text-orange-700 dark:text-orange-300 hover:bg-orange-100 dark:hover:bg-orange-900/40 transition-colors text-left group">
                             <QrCode className="mb-3 group-hover:scale-110 transition-transform" />
                             <p className="font-bold">Scan Ticket</p>
                             <p className="text-xs opacity-80 mt-1">Verify visitors quickly</p>
-                        </button>
-                        <button className="p-4 rounded-xl bg-violet-50 dark:bg-violet-900/20 border border-violet-100 dark:border-violet-900/30 text-violet-700 dark:text-violet-300 hover:bg-violet-100 dark:hover:bg-violet-900/40 transition-colors text-left group">
+                        </Link>
+                        <Link href="/dashboard/temples/create" className="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-900/30 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors text-left group">
                             <PlusCircle className="mb-3 group-hover:scale-110 transition-transform" />
                             <p className="font-bold">Add Temple</p>
                             <p className="text-xs opacity-80 mt-1">List a new temple</p>
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>

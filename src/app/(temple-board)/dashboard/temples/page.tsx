@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Plus, Building2, Edit, Trash2, Users, Calendar } from "lucide-react";
+import { Plus, Building2, Edit, Trash2, Users, Calendar, Search } from "lucide-react";
 
 interface Temple {
     id: string;
@@ -14,6 +14,13 @@ interface Temple {
     dailyTicketLimit: number;
     ticketPrice: number;
     isActive: boolean;
+    timeSlots?: {
+        id: string;
+        startTime: string;
+        endTime: string;
+        capacity: number;
+        isActive: boolean;
+    }[];
     _count: {
         bookings: number;
     };
@@ -23,7 +30,34 @@ export default function TemplesManagementPage() {
     const { data: session, status } = useSession();
     const router = useRouter();
     const [temples, setTemples] = useState<Temple[]>([]);
+    const [filteredTemples, setFilteredTemples] = useState<Temple[]>([]);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const formatTime = (time24: string) => {
+        const [hours, minutes] = time24.split(':').map(Number);
+        const period = hours >= 12 ? 'PM' : 'AM';
+        const hours12 = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+        return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+    };
+
+    useEffect(() => {
+        // Filter temples based on search term
+        if (searchTerm) {
+            const term = searchTerm.toLowerCase();
+            setFilteredTemples(
+                temples.filter(
+                    (t) =>
+                        t.name.toLowerCase().includes(term) ||
+                        t.location.toLowerCase().includes(term) ||
+                        t.city.toLowerCase().includes(term) ||
+                        t.state.toLowerCase().includes(term)
+                )
+            );
+        } else {
+            setFilteredTemples(temples);
+        }
+    }, [searchTerm, temples]);
 
     useEffect(() => {
         if (status === "unauthenticated") {
@@ -52,6 +86,7 @@ export default function TemplesManagementPage() {
             if (res.ok) {
                 const data = await res.json();
                 setTemples(data.temples || []);
+                setFilteredTemples(data.temples || []);
             }
         } catch (error) {
             console.error("Error fetching temples:", error);
@@ -84,9 +119,9 @@ export default function TemplesManagementPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
                     <p className="mt-4 text-gray-600">Loading temples...</p>
                 </div>
             </div>
@@ -94,7 +129,7 @@ export default function TemplesManagementPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="flex justify-between items-center mb-8">
                     <div>
@@ -107,16 +142,30 @@ export default function TemplesManagementPage() {
                     </div>
                     <button
                         onClick={() => router.push("/dashboard/temples/create")}
-                        className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105 shadow-lg"
+                        className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-amber-600 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-amber-700 transition-all transform hover:scale-105 shadow-lg"
                     >
                         <Plus className="w-5 h-5" />
                         Add New Temple
                     </button>
                 </div>
 
-                {temples.length > 0 ? (
+                {/* Search Bar */}
+                <div className="mb-6">
+                    <div className="relative">
+                        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <input
+                            type="text"
+                            placeholder="Search temples by name, city, or location..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
+                        />
+                    </div>
+                </div>
+
+                {filteredTemples.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {temples.map((temple) => (
+                        {filteredTemples.map((temple) => (
                             <div
                                 key={temple.id}
                                 className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
@@ -142,9 +191,9 @@ export default function TemplesManagementPage() {
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-4 mb-4">
-                                        <div className="bg-blue-50 rounded-lg p-3">
+                                        <div className="bg-orange-50 rounded-lg p-3">
                                             <p className="text-xs text-gray-600 mb-1">Daily Limit</p>
-                                            <p className="text-xl font-bold text-blue-600">
+                                            <p className="text-xl font-bold text-orange-600">
                                                 {temple.dailyTicketLimit}
                                             </p>
                                         </div>
@@ -156,20 +205,44 @@ export default function TemplesManagementPage() {
                                             </p>
                                         </div>
 
-                                        <div className="bg-purple-50 rounded-lg p-3 col-span-2">
+                                        <div className="bg-amber-50 rounded-lg p-3">
+                                            <p className="text-xs text-gray-600 mb-1">Time Slots</p>
+                                            <p className="text-sm font-bold text-amber-600">
+                                                {temple.timeSlots?.length || 0} slots
+                                            </p>
+                                        </div>
+
+                                        <div className="bg-orange-50 rounded-lg p-3">
                                             <p className="text-xs text-gray-600 mb-1">Total Bookings</p>
-                                            <p className="text-xl font-bold text-purple-600">
+                                            <p className="text-xl font-bold text-orange-600">
                                                 {temple._count.bookings}
                                             </p>
                                         </div>
                                     </div>
+
+                                    {/* Time Slots Preview */}
+                                    {temple.timeSlots && temple.timeSlots.length > 0 && (
+                                        <div className="mb-4">
+                                            <p className="text-xs text-gray-600 mb-2">Timings:</p>
+                                            <div className="flex flex-wrap gap-1">
+                                                {temple.timeSlots.map((slot, index) => (
+                                                    <span
+                                                        key={slot.id}
+                                                        className="inline-block px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded-md"
+                                                    >
+                                                        {formatTime(slot.startTime)} - {formatTime(slot.endTime)}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
 
                                     <div className="flex gap-2">
                                         <button
                                             onClick={() =>
                                                 router.push(`/dashboard/temples/${temple.id}/edit`)
                                             }
-                                            className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                            className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
                                         >
                                             <Edit className="w-4 h-4" />
                                             Edit
@@ -178,7 +251,7 @@ export default function TemplesManagementPage() {
                                             onClick={() =>
                                                 router.push(`/dashboard/temples/${temple.id}/bookings`)
                                             }
-                                            className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                                            className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
                                         >
                                             <Calendar className="w-4 h-4" />
                                             Bookings
@@ -194,6 +267,22 @@ export default function TemplesManagementPage() {
                             </div>
                         ))}
                     </div>
+                ) : temples.length > 0 && searchTerm ? (
+                    <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
+                        <div className="text-6xl mb-4">🔍</div>
+                        <h2 className="text-2xl font-bold text-gray-700 mb-2">
+                            No results found
+                        </h2>
+                        <p className="text-gray-500 mb-6">
+                            No temples match your search for &ldquo;{searchTerm}&rdquo;
+                        </p>
+                        <button
+                            onClick={() => setSearchTerm("")}
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition-all"
+                        >
+                            Clear Search
+                        </button>
+                    </div>
                 ) : (
                     <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
                         <div className="text-6xl mb-4">🛕</div>
@@ -205,7 +294,7 @@ export default function TemplesManagementPage() {
                         </p>
                         <button
                             onClick={() => router.push("/dashboard/temples/create")}
-                            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-amber-600 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-amber-700 transition-all"
                         >
                             <Plus className="w-5 h-5" />
                             Add New Temple

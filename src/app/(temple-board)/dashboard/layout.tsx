@@ -70,7 +70,7 @@ export default function DashboardLayout({
                                             key={link.href}
                                             href={link.href}
                                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${active
-                                                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20"
+                                                    ? "bg-orange-600 text-white shadow-lg shadow-orange-600/20"
                                                     : "text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-white"
                                                 }`}
                                         >
