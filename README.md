@@ -76,12 +76,6 @@ PENDING -> CONFIRMED -> VERIFIED
 
 ---
 
-## QR Code Security
-
-Each confirmed booking generates an encrypted QR code containing the booking ID, booking number, temple ID, visit date, and an HMAC-SHA256 signature. The payload is encrypted using AES-256-GCM before encoding. Temple board members scan these codes using the built-in QR scanner to verify entry. Tampered or invalid codes are rejected at the point of verification.
-
----
-
 ## Data Models
 
 - **User** — credentials, role, and approval status
